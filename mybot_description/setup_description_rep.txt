@@ -1,5 +1,5 @@
 Faite catkin_create_pkg mybot_description
-Ensuite, creer un dossier dans mybot_control : urdf et y inserer les fichiers:
+Ensuite, creer un dossier dans mybot_description : urdf et y inserer les fichiers:
   - mybot.xacro (contient la description du robot)
   - macros.xacro (contient des "fonctions" pour le fichier mybot.xacro)
   - mybot.gazebo (contient tous les plugins utlisés)
