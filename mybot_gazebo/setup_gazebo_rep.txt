@@ -1,0 +1,3 @@
+Faite catkin_create_pkg mybot_gazebo gazebo_ros
+Ensuite, creer un dossier dans mybot_gazebo : launch et y inserer le fichier "mybot_world.launch"
+Enfin creer un dossier dans mybot_gazebo : worlds et y inserer le fichier "mybot_world"
