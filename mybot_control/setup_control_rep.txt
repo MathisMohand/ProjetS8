@@ -1,0 +1,4 @@
+Faite catkin_create_pkg mybot_control
+Ensuite, creer un dossier dans mybot_control : config et y inserer le fichier "mybot_control.yaml"
+Enfin creer un dossier dans mybot_control : launch et y inserer le fichier "mybot_control.launch"
+  
