@@ -1,8 +1,21 @@
 import sys
 import numpy as np
 
-def get_vector_length(vx, vy, vz) -> float:
-    return np.sqrt(vx**2 + vy**2 + vz**2)
+def perpendicular_vector(v):
+    if v[0] == 0 and v[1] == 0:
+        if v[2] == 0:
+            # v is Vector(0, 0, 0)
+            raise ValueError('zero vector')
+
+        # v is Vector(0, 0, v.z)
+        return np.array([0, 1, 0])
+
+    return np.array([-v[1], v[0], 0])
+
+def compute_roll_pitch_yaw(v, px, py, pz):
+    yaw = np.arctan2(v[0], -v[1])
+    pitch = np.arctan2(np.sqrt(v[0]**2 + v[1]**2), v[2])
+    return 0, pitch, yaw
 
 def main():
     if len(sys.argv) != 2:
@@ -76,29 +89,31 @@ def main():
         nb_branches = int(f.readline())
         for i in range(nb_branches):
             line = f.readline()
-            # coords = (px, py, pz, vx, vy, vz, R)
-            coords = line.split()
-            coords = [float(s) for s in coords]
-            link_name = "branche{}".format(i+1)
-            collision_name = "b-c-{}".format(i+1)
-            visual_name = "b-v-{}".format(i+1)
-            # Position
-            x, y, z = coords[0], coords[1], coords[2]
-            # Radius
-            R = coords[6]
-            # Vecteur directeur
-            vx, vy, vz = coords[3], coords[4], coords[5]
-            roll = 0
-            if vz == 0:
-                pitch = np.arctan(np.sqrt(vx**2 + vy**2))
-            else:
-                pitch = np.arctan(np.sqrt(vx**2 + vy**2) / vz)
-            
-            yaw = np.arctan(vx / -vy)
-            length = get_vector_length(vx, vy, vz)
+            # # coords = (px, py, pz, vx, vy, vz, R)
+            # coords = line.split()
+            # coords = [float(s) for s in coords]
+            # link_name = "branche{}".format(i+1)
+            # collision_name = "b-c-{}".format(i+1)
+            # visual_name = "b-v-{}".format(i+1)
+            # # Position
+            # x, y, z = coords[0], coords[1], coords[2]
+            # # Radius
+            # R = coords[6]
+            # # Vecteur directeur
+            # vx, vy, vz = coords[3], coords[4], coords[5]
+            # v = np.array([vx, vy, vz])
+            # # Longueur
+            # length = np.linalg.norm(v)
 
-            output += cylinder_model.format(link_name, collision_name, x, y, z, roll, pitch, yaw, R,
-                                         length, visual_name, x, y, z, roll, pitch, yaw, R, length)
+            # roll, pitch, yaw = compute_roll_pitch_yaw(v, x, y, z)
+
+            # output += cylinder_model.format(link_name, collision_name, x, y, z, roll, pitch, yaw, R,
+            #                              length, visual_name, x, y, z, roll, pitch, yaw, R, length)
+        
+        # Trunk
+        output += cylinder_model.format("b1", "c1", 0.05, 0.05, 1, 0, 0, 0, 0.01,
+                                          2, "v1", 0.05, 0.05, 1, 0, 0, 0, 0.01, 2)
+        
         
         nb_fruits = int(f.readline())
         for i in range(nb_fruits):
@@ -113,7 +128,7 @@ def main():
             # Radius
             R = coords[6]
             # Vecteur directeur
-            vx, vy, vz = coords[3], coords[4], coords[5]
+            # vx, vy, vz = coords[3], coords[4], coords[5]
             yaw, pitch, roll = 0, 0, 0 # On s'en sert pas pour la sphere
             
             output += sphere_model.format(link_name, collision_name, x, y, z, roll, pitch, yaw, R,
